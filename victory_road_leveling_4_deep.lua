@@ -2,13 +2,14 @@ name = "Victory Road Kanto 3F leveler"
 author = "LKfo"
 description = [[Levelling first 4 pokemon in Victory Road with Shiny Pokemon detection! - with mount]]
 local game   = require "Libs/gamelib"
-
+catchPoke = "Drilbur"
 function onStart()
 	levelCap = 102
 	shinyCounter = 0
 	wildCounter = 0
 	startMoney = getMoney()
     kill = 0
+
     OnPoint = false
     Healing = true
 end
@@ -74,13 +75,13 @@ function onPathAction()
 			log("Moving to Victory Road...")
 			moveToMap("Victory Road Kanto 3F")
             if OnPoint and not Healing then
-                fatal("Got transport to on9 place stop bot!")
+                fatal("Got transport to on9 place stop bot!"..getPlayerX()..","..getPlayerY()..","..getMapName())
             end
 		elseif getMapName() == "Victory Road Kanto 3F" then
 			--moveToRectangle(46, 14, 47, 22
             moveToCell(29,17)
             if OnPoint and not Healing then
-                fatal("Got transport to on9 place stop bot!")
+                fatal("Got transport to on9 place stop bot!"..getPlayerX()..","..getPlayerY()..","..getMapName())
             end
 		elseif getMapName() == "Victory Road Kanto 2F" then
             if kill < 200 then
@@ -91,27 +92,27 @@ function onPathAction()
                 kill = 0
                 Healing = true
             else
-                moveToRectangle(14, 23, 16, 26)
+                moveToRectangle(19, 9, 24, 10)
             end
 
-            if game.inRectangle(12, 14, 14, 18) or game.inRectangle(14, 23, 16, 26) then
+            if game.inRectangle(12, 14, 14, 18) or game.inRectangle(19, 9, 24, 10) then
                 OnPoint = true
                 Healing = false
             elseif Healing then
                 OnPoint = false
             elseif OnPoint and not Healing then
-                fatal("Got transport to on9 place stop bot!")
+                fatal("Got transport to on9 place stop bot!"..getPlayerX()..","..getPlayerY()..","..getMapName())
             end
 
         else
             --god damn GM
-            fatal("Got transport to on9 place stop bot!")
+            fatal("Got transport to on9 place stop bot!"..getPlayerX()..","..getPlayerY()..","..getMapName())
 		end
 	end
 end
 
 function onBattleAction()
-	if isWildBattle() and isOpponentShiny() then 
+	if isWildBattle() and isOpponentShiny() or getOpponentName() == catchPoke then 
 		if useItem("Ultra Ball") or useItem("Great Ball") or useItem("Pokeball") then
 			return
 		end
