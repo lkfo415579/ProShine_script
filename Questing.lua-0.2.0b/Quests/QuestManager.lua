@@ -15,7 +15,7 @@ local CascadeBadgeQuest	  = require('Quests/Kanto/CascadeBadgeQuest')
 local LanceVermilionQuest = require('Quests/Kanto/LanceVermilionQuest')
 local SSAnneQuest         = require('Quests/Kanto/SSAnneQuest')
 local ThunderBadgeQuest   = require('Quests/Kanto/ThunderBadgeQuest')
-local FlashQuest   = require('Quests/Kanto/FlashQuest')
+local FlashQuest          = require('Quests/Kanto/FlashQuest')
 local RainbowBadgeQuest   = require('Quests/Kanto/RainbowBadgeQuest')
 
 local quests = {
