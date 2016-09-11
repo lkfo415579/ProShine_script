@@ -132,8 +132,7 @@ function Quest:needPokecenter()
 		end
 	-- else we would spend more time evolving the higher level ones
 	elseif not self:isTrainingOver() then
-		if getUsablePokemonCount() <= 1
-			or game.getUsablePokemonCountUnderLevel(self.level) == 0
+		if getUsablePokemonCount() <= 1 or game.getUsablePokemonCountUnderLevel(self.level) == 0
 		then
 			return true
 		end
@@ -213,7 +212,7 @@ function Quest:wildBattle()
 		if useItem("Ultra Ball") or useItem("Great Ball") or useItem("Pokeball") then
 			return true
 		end
-	elseif not isAlreadyCaught() then
+	elseif not isAlreadyCaught() and (not getOpponentName() == "Hoothoot") then --not catch Hoothoot, it cause pokecenter heal loop
 		if useItem("Ultra Ball") or useItem("Great Ball") or useItem("Pokeball") then
 			return true
 		end

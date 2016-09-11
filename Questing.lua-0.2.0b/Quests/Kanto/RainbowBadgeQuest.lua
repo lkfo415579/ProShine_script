@@ -14,10 +14,12 @@ local level		  = 40
 
 local first_B2F = false
 local kill_eevee = false
+local leave_lift = false
 
 local dialogs = {
 	SecurityGuy = Dialog:new({"Remember to turn all stones", "You better go"}),
-	Elevator = Dialog:new({"You have arrived on B4 Floor"}),
+	ElevatorB4F = Dialog:new({"You have arrived on B4 Floor"}),
+	ElevatorB2F = Dialog:new({"You have arrived on B2 Floor"}),
 	ElevatorB1F = Dialog:new({"You have arrived on B1 Floor"}),
 	Key = Dialog:new({"You swipe your Card Key"})
 }
@@ -47,13 +49,16 @@ function RainbowBadgeQuest:RocketHideoutElevator()
 			return moveToCell(2, 5)--exit eleva
 		end
 	end
-	if hasItem("Lift Key") and not dialogs.Elevator.state then
+	if dialogs.ElevatorB4F.state or dialogs.ElevatorB1F.state or dialogs.ElevatorB2F.state then
+		return moveToCell(2, 5)--exit eleva
+	end
+	if hasItem("Lift Key") and hasItem("Card Key") and not dialogs.ElevatorB4F.state then
 		pushDialogAnswer(3)
 		return talkToNpcOnCell(1, 1)
 		--first_B2F = true
-	end
-	if dialogs.Elevator.state then
-		return moveToCell(2, 5)--exit eleva
+	elseif hasItem("Lift Key") and not dialogs.ElevatorB2F.state then
+		pushDialogAnswer(2)
+		return talkToNpcOnCell(1, 1)
 	end
 	---if not first_B2F then
 	--	 pushDialogAnswer(2)
@@ -64,10 +69,11 @@ function RainbowBadgeQuest:RocketHideoutElevator()
 	--end
 end
 function RainbowBadgeQuest:RocketHideoutB1F()
+	--self.printNpcMap()
 	log("RainbowBadgeQuest:RocketHideoutB1F(): start")
 	if hasItem("Silph Scope") and not game.inRectangle(1, 17, 7, 22) then
 		moveToMap("Celadon Gamecorner Stairs")
-	else
+	elseif hasItem("Silph Scope") then
 		if not game.inRectangle(6, 18, 6, 18) then
 			return moveToCell(6, 18)
 		elseif game.inRectangle(6, 18, 6, 18) then
@@ -75,11 +81,16 @@ function RainbowBadgeQuest:RocketHideoutB1F()
 		end
 	end
 	if isNpcOnCell(24, 20) then
-		log("RainbowBadgeQuest:RocketHideoutB1F(): if isNpcOnCell(24, 20)")
 		return talkToNpcOnCell(24, 20)
 	elseif isNpcOnCell(23, 20) then
 		log("RainbowBadgeQuest:RocketHideoutB1F(): if isNpcOnCell(23, 20)")
-		return talkToNpcOnCell(23, 20)
+		if not game.inRectangle(24, 20, 24, 20) then --go to 24, 20 to take lift card
+			return moveToCell(24, 20)
+		elseif game.inRectangle(24, 20, 24, 20) then
+			return talkToNpcOnCell(23, 20)
+		end
+	elseif game.inRectangle(17, 17, 24, 31) then --lift card area
+		return moveToCell(22, 29) -- go to B2F
 	elseif game.inRectangle(1, 17, 7, 22) then --close area
 		if not game.inRectangle(6, 18, 6, 18) then
 			return moveToCell(6, 18)
@@ -91,15 +102,16 @@ function RainbowBadgeQuest:RocketHideoutB1F()
 		return moveToMap("Rocket Hideout B2F")
 		--moveToCell(22, 29)
 		--return moveToCell(17, 9)
-		--return moveToCell(22, 29)
 		--return moveToMap("Rocket Hideout Elevator")
 	end
 end
 function RainbowBadgeQuest:RocketHideoutB2F()
-	if not kill_eevee then
-		return moveToCell(23, 4)
-	elseif isNpcOnCell(28, 20) then
+	--self.printNpcMap()
+	
+	if isNpcOnCell(28, 20) then
 		return talkToNpcOnCell(28, 20)
+	elseif not kill_eevee then
+		return moveToCell(23, 4)
 	elseif hasItem("Lift Key") then
 		return moveToCell(31, 19)
 	end
@@ -150,13 +162,14 @@ function RainbowBadgeQuest:CeladonGamecornerStairs()
 	if isNpcOnCell(13, 3) then
 		return talkToNpcOnCell(13, 3)
 	elseif hasItem("Silph Scope") then
-		moveToMap("Celadon City")
+		return moveToMap("Celadon City")
 	else
 		return moveToMap("Rocket Hideout B1F")
 	end
 end
 
 function RainbowBadgeQuest:CeladonCity()
+	--self.printNpcMap()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Celadon")
 	elseif not self:isTrainingOver() then
@@ -174,8 +187,19 @@ function RainbowBadgeQuest:CeladonCity()
 	else --go to get the Badge
 		if isNpcOnCell(46, 49) then
 			return talkToNpcOnCell(46, 49)
-		else 
-			return moveToMap("CeladonGym")
+		else
+			log("go to gym")
+			if game.hasPokemonWithMove("Cut") then
+				return moveToCell(21, 50)
+			else
+				if self.pokemonId < getTeamSize() then
+					useItemOnPokemon("HM01 - Cut", self.pokemonId)
+					log("Pokemon: " .. self.pokemonId .. " Try Learning: HM01 - Cut")
+					self.pokemonId = self.pokemonId + 1
+				else
+					fatal("No pokemon in this team can learn - Cut")
+				end
+			end
 		end
 	end
 end
@@ -232,9 +256,9 @@ end
 function RainbowBadgeQuest:printNpcMap()
 	-- find all npc in the map
 	range_i_from = 1
-	range_i_to = 25
+	range_i_to = 50
 	range_j_from = 1
-	range_j_to = 25
+	range_j_to = 80
 	
 	tmp_result = 'i=■'
 	for i = range_i_from, range_i_to do
