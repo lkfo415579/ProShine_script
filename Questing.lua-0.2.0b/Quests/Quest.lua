@@ -212,7 +212,7 @@ function Quest:wildBattle()
 		if useItem("Ultra Ball") or useItem("Great Ball") or useItem("Pokeball") then
 			return true
 		end
-	elseif not isAlreadyCaught() and (not getOpponentName() == "Hoothoot") then --not catch Hoothoot, it cause pokecenter heal loop
+	elseif not isAlreadyCaught() and getOpponentHealthPercent() < 50 then --not catch Hoothoot, it cause pokecenter heal loop
 		if useItem("Ultra Ball") or useItem("Great Ball") or useItem("Pokeball") then
 			return true
 		end
