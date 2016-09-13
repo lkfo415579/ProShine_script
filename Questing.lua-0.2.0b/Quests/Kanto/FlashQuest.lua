@@ -134,10 +134,12 @@ function FlashQuest:RockTunnel1()
         self.Tunnel2 = true
     end
     if self.Tunnel2 then
+		self.Tunnel1 = false
         return moveToCell(8,15)
     end
+
     if game.inRectangle(5, 28, 9, 30) then
-        self.Tunnel2 =false
+        self.Tunnel2 = false
         self.Tunnel4 = true
     end
     if self.Tunnel4 then
@@ -162,10 +164,11 @@ function FlashQuest:RockTunnel2()
     end
     if game.inRectangle(9, 9, 12, 16) then
         self.Tunnel3 = true
-        self.Tunnel1 =false
+        self.Tunnel1 = false
     end
     if self.Tunnel3 then
-        return moveToCell(8,26)
+		self.Tunnel2 = false
+        return moveToCell(8,26)--final exit to tunnel 1
     end
     error("FlashQuest:RockTunnel2(): [" .. getPlayerX() .. "," .. getPlayerY() .. "] is not a known position")
 end
