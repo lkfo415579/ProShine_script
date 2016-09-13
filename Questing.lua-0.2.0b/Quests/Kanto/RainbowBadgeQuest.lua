@@ -41,38 +41,42 @@ function RainbowBadgeQuest:isDone()
 end
 
 function RainbowBadgeQuest:RocketHideoutElevator()
-	if hasItem("Silph Scope") then 
-		if not dialogs.ElevatorB1F.state then
-			pushDialogAnswer(1)
-			return talkToNpcOnCell(1, 1)
-		else
-			return moveToCell(2, 5)--exit eleva
-		end
-	end
-	if dialogs.ElevatorB4F.state or dialogs.ElevatorB1F.state or dialogs.ElevatorB2F.state then
+	if leave_lift then
+		leave_lift = false
 		return moveToCell(2, 5)--exit eleva
 	end
-	if hasItem("Lift Key") and hasItem("Card Key") and not dialogs.ElevatorB4F.state then
-		pushDialogAnswer(3)
-		return talkToNpcOnCell(1, 1)
-		--first_B2F = true
-	elseif hasItem("Lift Key") and not dialogs.ElevatorB2F.state then
-		pushDialogAnswer(2)
-		return talkToNpcOnCell(1, 1)
+	if hasItem("Silph Scope") then 
+		if not game.inRectangle(1, 2, 1, 2) then
+			return moveToCell(1, 2)
+		else
+			leave_lift = true
+			pushDialogAnswer(1)
+			return talkToNpcOnCell(1, 1)
+		end
 	end
-	---if not first_B2F then
-	--	 pushDialogAnswer(2)
-	--	  first_B2F = true
-	--	 return talkToNpcOnCell(1, 1)
-	-- else
-	--	  moveToCell(2, 5)
-	--end
+	if hasItem("Lift Key") and hasItem("Card Key") then
+		if not game.inRectangle(1, 2, 1, 2) then
+			return moveToCell(1, 2)
+		else
+			leave_lift = true
+			pushDialogAnswer(3)
+			return talkToNpcOnCell(1, 1)
+		end
+	elseif hasItem("Lift Key") and not hasItem("Card Key") then
+		if not game.inRectangle(1, 2, 1, 2) then
+			return moveToCell(1, 2)
+		else
+			leave_lift = true
+			pushDialogAnswer(2)
+			return talkToNpcOnCell(1, 1)
+		end
+	end
 end
 function RainbowBadgeQuest:RocketHideoutB1F()
 	--self.printNpcMap()
 	log("RainbowBadgeQuest:RocketHideoutB1F(): start")
 	if hasItem("Silph Scope") and not game.inRectangle(1, 17, 7, 22) then
-		moveToMap("Celadon Gamecorner Stairs")
+		return moveToMap("Celadon Gamecorner Stairs")
 	elseif hasItem("Silph Scope") then
 		if not game.inRectangle(6, 18, 6, 18) then
 			return moveToCell(6, 18)
@@ -187,9 +191,11 @@ function RainbowBadgeQuest:CeladonCity()
 	else --go to get the Badge
 		if isNpcOnCell(46, 49) then
 			return talkToNpcOnCell(46, 49)
+		elseif not game.inRectangle(46, 53, 46, 53) then
+			return moveToCell(46, 53)
 		else
-			log("go to gym")
 			if game.hasPokemonWithMove("Cut") then
+				log("go to gym")
 				return moveToCell(21, 50)
 			else
 				if self.pokemonId < getTeamSize() then
