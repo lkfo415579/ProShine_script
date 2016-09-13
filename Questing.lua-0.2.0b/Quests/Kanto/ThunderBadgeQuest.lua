@@ -47,7 +47,7 @@ function ThunderBadgeQuest:new()
 end
 
 function ThunderBadgeQuest:isDoable()
-	if not hasItem("Rainbow Badge") and self:hasMap() then
+	if not hasItem("Thunder Badge") and self:hasMap() then
 		return true
 	end
 	return false

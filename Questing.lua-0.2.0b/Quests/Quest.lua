@@ -299,4 +299,45 @@ function Quest:learningMove(moveName, pokemonIndex)
 	return forgetAnyMoveExcept(hmMoves)
 end
 
+
+function Quest:printNpcMap()
+	-- find all npc in the map
+	range_i_from = 1
+	range_i_to = 50
+	range_j_from = 1
+	range_j_to = 80
+	
+	tmp_result = 'i=■'
+	for i = range_i_from, range_i_to do
+		if i % 10 == 5 or i % 10 == 0 then
+			tmp_result = tmp_result .. '■'
+		else 
+			tmp_result = tmp_result .. '□'
+		end
+	end
+	log(tmp_result)
+	
+	for j = range_j_from, range_j_to do 
+		i_result = 'j='..j % 10
+		for i = range_i_from, range_i_to do 
+			if isNpcOnCell(i, j) then 
+				i_result = i_result .. '■'
+			else
+				i_result = i_result .. '□'
+			end 
+		end
+		log(i_result)
+	end 
+	
+	for j = range_j_from, range_j_to do 
+		i_result = ''
+		for i = range_i_from, range_i_to do 
+			if isNpcOnCell(i, j) then 
+				log("Npc on "..i..","..j)
+			end
+		end
+	end 
+	error("stop")
+end
+
 return Quest

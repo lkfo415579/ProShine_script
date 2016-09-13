@@ -30,11 +30,14 @@ function RainbowBadgeQuest:new()
 end
 
 function RainbowBadgeQuest:isDoable()
-	return self:hasMap()
+	if not hasItem("Rainbow Badge") and self:hasMap() then
+		return true
+	end
+	return false
 end
 
 function RainbowBadgeQuest:isDone()
-	if hasItem("Rainbow Badge") and getMapName() == "Celadon City" then
+	if hasItem("Rainbow Badge") then
 		return true
 	end
 	return false
@@ -73,7 +76,6 @@ function RainbowBadgeQuest:RocketHideoutElevator()
 	end
 end
 function RainbowBadgeQuest:RocketHideoutB1F()
-	--self.printNpcMap()
 	log("RainbowBadgeQuest:RocketHideoutB1F(): start")
 	if hasItem("Silph Scope") and not game.inRectangle(1, 17, 7, 22) then
 		return moveToMap("Celadon Gamecorner Stairs")
@@ -87,7 +89,6 @@ function RainbowBadgeQuest:RocketHideoutB1F()
 	if isNpcOnCell(24, 20) then
 		return talkToNpcOnCell(24, 20)
 	elseif isNpcOnCell(23, 20) then
-		log("RainbowBadgeQuest:RocketHideoutB1F(): if isNpcOnCell(23, 20)")
 		if not game.inRectangle(24, 20, 24, 20) then --go to 24, 20 to take lift card
 			return moveToCell(24, 20)
 		elseif game.inRectangle(24, 20, 24, 20) then
@@ -100,18 +101,12 @@ function RainbowBadgeQuest:RocketHideoutB1F()
 			return moveToCell(6, 18)
 		elseif game.inRectangle(6, 18, 6, 18) then
 			return talkToNpcOnCell(7, 18)
-			--return talkToNpcOnCell(7,22) --doctor before jump out
 		end
 	else
 		return moveToMap("Rocket Hideout B2F")
-		--moveToCell(22, 29)
-		--return moveToCell(17, 9)
-		--return moveToMap("Rocket Hideout Elevator")
 	end
 end
 function RainbowBadgeQuest:RocketHideoutB2F()
-	--self.printNpcMap()
-	
 	if isNpcOnCell(28, 20) then
 		return talkToNpcOnCell(28, 20)
 	elseif not kill_eevee then
@@ -173,13 +168,11 @@ function RainbowBadgeQuest:CeladonGamecornerStairs()
 end
 
 function RainbowBadgeQuest:CeladonCity()
-	--self.printNpcMap()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Celadon")
 	elseif not self:isTrainingOver() then
 		return moveToMap("Route 7")
-	elseif not hasItem("Silph Scope") then
-		--ready to do quest
+	elseif not hasItem("Silph Scope") then --ready to do quest
 		if not dialogs.SecurityGuy.state then
 			pushDialogAnswer(2)
 			pushDialogAnswer(1)
@@ -211,7 +204,6 @@ function RainbowBadgeQuest:CeladonCity()
 end
 
 function RainbowBadgeQuest:CeladonGym()
-	--self.printNpcMap()
 	if hasItem("RainBow Badge") then
 		return moveToMap("Celadon City")
 	else

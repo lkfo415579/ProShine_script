@@ -17,8 +17,9 @@ local kill_eevee = false
 local leave_lift = false
 
 local dialogs = {
-	FujisNotes = Dialog:new({"I went to Pokemon Tower to investigate", "I need to go into that tower to check what is going on"}),
-	TowerFinish = Dialog:new({"Thank you for helping me."})
+	FujisNotes = Dialog:new({"I went to Pokemon Tower to investigate", "I already read this note."}),
+	TowerFinish = Dialog:new({"Thank you for helping me."}),
+	SayBye = Dialog:new({"Hey there, I want to thank you again for what you have done for Marowak", "I am wishing the best for you!"})
 }
 local SoulBadgeQuest = Quest:new()
 function SoulBadgeQuest:new()
@@ -26,7 +27,10 @@ function SoulBadgeQuest:new()
 end
 
 function SoulBadgeQuest:isDoable()
-	return self:hasMap()
+	if not hasItem("Soul Badge") and self:hasMap() then
+		return true
+	end
+	return false
 end
 
 function SoulBadgeQuest:isDone()
@@ -50,7 +54,6 @@ function SoulBadgeQuest:CeladonCity()
 	if isNpcOnCell(21, 51) then
 		return talkToNpcOnCell(21, 51)
 	end
-	--self.printNpcMap()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Celadon")
 	else
@@ -89,10 +92,10 @@ end
 function SoulBadgeQuest:LavenderTownVolunteerHouse()
 	if isNpcOnCell(10, 10) and not dialogs.FujisNotes.state then
 		return talkToNpcOnCell(10, 10)
-	elseif isNpcOnCell(8, 5) then
+	elseif isNpcOnCell(8, 5) and not dialogs.SayBye.state then
 		return talkToNpcOnCell(8, 5)
 	else
-		return moveToMap("Pokecenter Lavender")
+		return moveToMap("Lavender Town")
 	end
 end
 
@@ -148,7 +151,7 @@ end
 
 function SoulBadgeQuest:PokemonTower7F()
 	if not dialogs.TowerFinish.state and isNpcOnCell(9, 5) then
-		return talkToNpcOnCell(9, 19)
+		return talkToNpcOnCell(9, 5)
 	else 
 		return moveToMap("Pokemon Tower 6F")
 	end
@@ -157,9 +160,9 @@ end
 function SoulBadgeQuest:LavenderTown()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Lavender")
-	else not dialogs.FujisNotes.state then
+	elseif not dialogs.FujisNotes.state then
 		return moveToCell(10, 12)
-	else hasItem("Poke Flute") then
+	elseif hasItem("Poke Flute") then
 		return moveToMap("Route 12")
 	else
 		return moveToMap("Pokemon Tower 1F")
@@ -167,7 +170,7 @@ function SoulBadgeQuest:LavenderTown()
 end
 
 function SoulBadgeQuest:Route12()
-	if isNpcOnCell(18, 47) then
+	if isNpcOnCell(18, 47) then 
 		return talkToNpcOnCell(18, 47)
 	else
 		return moveToMap("Route 13")
@@ -209,48 +212,8 @@ function SoulBadgeQuest:Route18()
 		return moveToMap("Fuchsia City")
 	end
 end
-function RainbowBadgeQuest:PokecenterFuchsia()
+function SoulBadgeQuest:PokecenterFuchsia()
 	return self:pokecenter("Fuchsia City")
-end
-
-function SoulBadgeQuest:printNpcMap()
-	-- find all npc in the map
-	range_i_from = 1
-	range_i_to = 50
-	range_j_from = 1
-	range_j_to = 80
-	
-	tmp_result = 'i=■'
-	for i = range_i_from, range_i_to do
-		if i % 10 == 5 or i % 10 == 0 then
-			tmp_result = tmp_result .. '■'
-		else 
-			tmp_result = tmp_result .. '□'
-		end
-	end
-	log(tmp_result)
-	
-	for j = range_j_from, range_j_to do 
-		i_result = 'j='..j % 10
-		for i = range_i_from, range_i_to do 
-			if isNpcOnCell(i, j) then 
-				i_result = i_result .. '■'
-			else
-				i_result = i_result .. '□'
-			end 
-		end
-		log(i_result)
-	end 
-	
-	for j = range_j_from, range_j_to do 
-		i_result = ''
-		for i = range_i_from, range_i_to do 
-			if isNpcOnCell(i, j) then 
-				log("Npc on "..i..","..j)
-			end
-		end
-	end 
-	error("stop")
 end
 
 return SoulBadgeQuest
