@@ -203,6 +203,16 @@ function SoulBadgeQuest:FuchsiaCity()
 	end
 end
 
+function SoulBadgeQuest:FuchsiaGym()
+	if hasItem("Soul Badge") then
+		return moveToMap("Fuchsia City")
+	else
+		if isNpcOnCell(7, 10) then
+			return talkToNpcOnCell(7, 10)
+		end
+	end
+end
+
 function SoulBadgeQuest:Route18()
 	if self:needPokecenter() then
 		return moveToMap("Fuchsia City")
