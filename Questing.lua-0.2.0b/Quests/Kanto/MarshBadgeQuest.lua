@@ -323,7 +323,7 @@ end
 function MarshBadgeQuest:Route15StopHouse()
 	return moveToMap("Route 15")
 end
-g
+
 function MarshBadgeQuest:FuchsiaGym()
 	if hasItem("Soul Badge") then
 		return moveToMap("Fuchsia City")
