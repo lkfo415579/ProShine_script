@@ -10,7 +10,7 @@ local Dialog = require "Quests/Dialog"
 
 local name			= 'MarshBadge'
 local description	= 'from Fuchsia city to get Marsh Badge'
-local level			= 50
+local level			= 55
 
 local pokemonId = 1
 local isBattleSaffronBoss = false
@@ -155,6 +155,9 @@ function MarshBadgeQuest:CeladonCity()
 end
 
 function MarshBadgeQuest:CeladonMart1()
+	if not game.inRectangle(5, 11, 5, 11) then
+		return moveToCell(5, 11)
+	end
 	if not hasItem("Lemonade") then
 		return moveToMap("Celadon Mart 2")
 	else
@@ -251,9 +254,11 @@ function MarshBadgeQuest:SaffronGym()
 		if game.inRectangle(9, 16, 15, 22) then --entrance
 			return moveToCell(15, 17)
 		elseif game.inRectangle(17, 16, 23, 20) then --right bottom
-			return moveToCell(18, 17)
-		elseif game.inRectangle(17, 2, 23, 6) then
-			return moveToCell(18, 6)
+			return moveToCell(18, 20)
+		elseif game.inRectangle(1, 16, 7, 20) then --left bottom
+			return moveToCell(6, 20)
+		elseif game.inRectangle(1, 9, 7, 13) then
+			return moveToCell(2, 13)
 		elseif game.inRectangle(1, 2, 7, 6) then
 			return moveToCell(2, 6)
 		elseif game.inRectangle(9, 9, 15, 13) then
