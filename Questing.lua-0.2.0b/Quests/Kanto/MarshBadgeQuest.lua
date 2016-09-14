@@ -193,11 +193,12 @@ function MarshBadgeQuest:CeladonMart5()
 end
 
 function MarshBadgeQuest:CeladonMart6()
+	--self:printNpcMap()
 	if not hasItem("Lemonade") then
 		local money = getMoney()
 		if money >= 350 then
-			if not isNpcOnCell(16, 8) then
-				return talkToNpcOnCell(16, 8)
+			if not isShopOpen() then
+				talkToNpcOnCell(16, 7)
 			else
 				return buyItem("Lemonade", 1)
 			end
