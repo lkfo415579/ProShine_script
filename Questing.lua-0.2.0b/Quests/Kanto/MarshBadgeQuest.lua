@@ -10,7 +10,7 @@ local Dialog = require "Quests/Dialog"
 
 local name			= 'MarshBadge'
 local description	= 'from Fuchsia city to get Marsh Badge'
-local level			= 50
+local level			= 55
 
 local pokemonId = 1
 local isBattleSaffronBoss = false
@@ -147,16 +147,21 @@ function MarshBadgeQuest:CeladonCity()
 		return moveToMap("Pokecenter Celadon")
 	elseif not hasItem("Lemonade") then
 		return moveToMap("Celadon Mart 1")
+	elseif not self:isTrainingOver() and not self:needPokecenter() then
+		return moveToRectangle(30, 36, 34, 38)
 	else
 		return moveToMap("Route 7")
 	end
 end
 
 function MarshBadgeQuest:CeladonMart1()
+	if not game.inRectangle(5, 11, 5, 11) then
+		return moveToCell(5, 11)
+	end
 	if not hasItem("Lemonade") then
 		return moveToMap("Celadon Mart 2")
 	else
-		return moveToMap("Celadon City")
+		return moveToMap("Celadon City") -- Why bot stop here?
 	end
 end
 
@@ -196,14 +201,14 @@ function MarshBadgeQuest:CeladonMart6()
 	--self:printNpcMap()
 	if not hasItem("Lemonade") then
 		local money = getMoney()
-		if money >= 350 then
+		if money >= 700 then
 			if not isShopOpen() then
 				talkToNpcOnCell(16, 7)
 			else
-				return buyItem("Lemonade", 1)
+				return buyItem("Lemonade", 2)
 			end
 		else
-			fatal("What!? You don't even have 350 dollars, I cannot help you anymore. Make 350 dollars and start again. Orz ")
+			fatal("What!? You don't even have 700 dollars, I cannot help you anymore. Make 700 dollars and start again. Orz ")
 		end
 	else
 		return moveToMap("Celadon Mart 5")
@@ -213,13 +218,9 @@ end
 -- Saffron City quest
 function MarshBadgeQuest:Route7()
 	if not hasItem("Lemonade") and not saveRespawnPoint then
-		if getMoney() < 350 then
-			return moveToGrass() -- Okay, I help you to make money here
-		else
-			return moveToMap("Celadon City")
-		end
-	elseif not self:isTrainingOver() and not self:needPokecenter() then
-		return moveToGrass()
+		return moveToMap("Celadon City")
+	elseif not self:isTrainingOver() then
+		return moveToMap("Celadon City")
 	else
 		return moveToMap("Route 7 Stop House")
 	end
@@ -243,6 +244,34 @@ function MarshBadgeQuest:SaffronCity()
 	elseif isNpcOnCell(49, 14) then
 		isBattleSaffronBoss = false
 		return moveToMap("Silph Co 1F")
+	else --ready to beat gym boss
+		return moveToMap("Saffron Gym")
+	end
+end
+
+function MarshBadgeQuest:SaffronGym()
+	if not hasItem("Marsh Badge") then
+		if game.inRectangle(9, 16, 15, 22) then --entrance
+			return moveToCell(15, 17)
+		elseif game.inRectangle(17, 16, 23, 20) then --right bottom
+			return moveToCell(18, 20)
+		elseif game.inRectangle(1, 16, 7, 20) then --left bottom
+			return moveToCell(6, 20)
+		elseif game.inRectangle(1, 9, 7, 13) then
+			return moveToCell(2, 13)
+		elseif game.inRectangle(1, 2, 7, 6) then
+			return moveToCell(2, 6)
+		elseif game.inRectangle(9, 9, 15, 13) then
+			if isNpcOnCell(12, 10) then
+				return talkToNpcOnCell(12, 10)
+			end
+		end
+	else
+		if game.inRectangle(9, 9, 15, 13) then
+			return moveToCell(10, 13)
+		elseif game.inRectangle(9, 16, 15, 22) then --entrance
+			return moveToMap("Saffron City")
+		end
 	end
 end
 
