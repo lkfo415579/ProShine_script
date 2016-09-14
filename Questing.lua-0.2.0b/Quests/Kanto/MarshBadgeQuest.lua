@@ -262,26 +262,39 @@ end
 function MarshBadgeQuest:SilphCo2F()
 	if not isBattleSaffronBoss then
 		return moveToMap("Silph Co 3F")
+	else
+		return moveToMap("Silph Co 1F")
 	end
 end
 
 function MarshBadgeQuest:SilphCo3F()
 	if not isBattleSaffronBoss then
 		return moveToCell(16, 18)
+	else
+		return moveToMap("Silph Co 2F")
 	end
 end
 
 function MarshBadgeQuest:SilphCo7F()
 	if not isBattleSaffronBoss then
 		return moveToCell(6, 11)
+	else
+		return moveToCell(6, 6)
 	end
 end
 
 function MarshBadgeQuest:SilphCo11F()
 	if not isBattleSaffronBoss then
 		if isNpcOnCell(3, 13) then
-			return talkToNpcOnCell(3, 13) --stop here
+			return talkToNpcOnCell(3, 13)
+		elseif isNpcOnCell(6, 15) then
+			return talkToNpcOnCell(6, 15)
+		elseif isNpcOnCell(9, 11) then
+			isBattleSaffronBoss = true
+			return talkToNpcOnCell(9, 11)
 		end
+	else
+		return moveToCell(3, 7)
 	end
 end
 
@@ -338,6 +351,10 @@ end
 
 function MarshBadgeQuest:PokecenterFuchsia()
 	return self:pokecenter("Fuchsia City")
+end
+
+function MarshBadgeQuest:PokecenterCeladon()
+	return self:pokecenter("Celadon City")
 end
 
 return MarshBadgeQuest
