@@ -12,6 +12,7 @@ local name			= 'MarshBadge'
 local description	= 'from Fuchsia city to get Marsh Badge'
 local level			= 50
 
+local pokemonId = 1
 local isBattleSaffronBoss = false
 local saveRespawnPoint = false
 
@@ -40,7 +41,7 @@ end
 function MarshBadgeQuest:FuchsiaCity()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Fuchsia")
-	elseif not self:isTrainingOver() then
+	elseif game.hasPokemonWithMove("Surf") and not self:isTrainingOver() then
 		return moveToMap("Fuchsia City Stop House")
 	elseif not hasItem("HM03 - Surf") then
 		log("going to get HM03")
@@ -55,10 +56,10 @@ function MarshBadgeQuest:FuchsiaCity()
 end
 
 function MarshBadgeQuest:FuchsiaCityStopHouse()
-	if not self:isTrainingOver() then
-		return moveToMap("Route 19")
-	elseif self:needPokecenter() then
+	if self:needPokecenter() then
 		return moveToMap("Fuchsia City")
+	elseif game.hasPokemonWithMove("Surf") and not self:isTrainingOver() then
+		return moveToMap("Route 19")
 	end
 	
 	if not dialogs.BattlePikachu.state then
@@ -69,10 +70,10 @@ function MarshBadgeQuest:FuchsiaCityStopHouse()
 end
 
 function MarshBadgeQuest:Route19()
-	if not self:isTrainingOver() then
-		return moveToWater()
-	elseif self:needPokecenter() then
+	if self:needPokecenter() then
 		return moveToMap("Fuchsia City Stop House")
+	elseif game.hasPokemonWithMove("Surf") and not self:isTrainingOver() then
+		return moveToWater()
 	end
 	
 	if isNpcOnCell(33, 19) and not dialogs.BattlePikachu.state then
@@ -108,7 +109,7 @@ function MarshBadgeQuest:SafariArea1()
 end
 
 function MarshBadgeQuest:SafariArea2()
-	return moveToCell("Safari Area 3")
+	return moveToMap("Safari Area 3")
 end
 
 function MarshBadgeQuest:SafariArea3()
@@ -127,10 +128,10 @@ function MarshBadgeQuest:SafariHouse4()
 		if game.hasPokemonWithMove("Surf") then
 			return moveToMap("Safari Area 3")
 		else
-			if self.pokemonId < getTeamSize() then
-				useItemOnPokemon("HM03 - Surf", self.pokemonId)
-				log("Pokemon: " .. self.pokemonId .. " Try Learning: HM03 - Surf")
-				self.pokemonId = self.pokemonId + 1
+			if pokemonId < getTeamSize() then
+				useItemOnPokemon("HM03 - Surf", pokemonId)
+				log("Pokemon: " .. pokemonId .. " Try Learning: HM03 - Surf")
+				pokemonId = pokemonId + 1
 			else
 				fatal("No pokemon in this team can learn - Surf")
 			end
