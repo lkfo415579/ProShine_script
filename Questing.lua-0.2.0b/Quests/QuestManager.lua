@@ -19,6 +19,7 @@ local FlashQuest          = require('Quests/Kanto/FlashQuest')
 local RainbowBadgeQuest   = require('Quests/Kanto/RainbowBadgeQuest')
 local SoulBadgeQuest      = require('Quests/Kanto/SoulBadgeQuest')
 local MarshBadgeQuest     = require('Quests/Kanto/MarshBadgeQuest')
+local VolcanoBadgeQuest   = require('Quests/Kanto/VolcanoBadgeQuest')
 
 local quests = {
 	StartQuest:new(),
@@ -33,7 +34,8 @@ local quests = {
 	FlashQuest:new(),
 	RainbowBadgeQuest:new(),
 	SoulBadgeQuest:new(),
-	MarshBadgeQuest:new()
+	MarshBadgeQuest:new(),
+	VolcanoBadgeQuest:new()
 }
 
 function QuestManager:new(o)
