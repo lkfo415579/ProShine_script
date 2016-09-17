@@ -155,9 +155,9 @@ function VolcanoBadgeQuest:CinnabarIsland()
 		return moveToMap("Route 20")
 	elseif not hasItem("Cinnabar Key") and isNpcOnCell(28, 17) then
 		-- Cinnabar quest
-		if isNpcOnCell(18, 17) then
-			return talkToNpcOnCell(18, 17)
-		elseif not isNpcOnCell(18, 17) then
+		if isNpcOnCell(18, 15) then
+			return talkToNpcOnCell(18, 15)
+		elseif not isNpcOnCell(18, 15) then
 			return moveToMap("Cinnabar mansion 1")
 		end
 	elseif hasItem("Cinnabar Key") and isNpcOnCell(28, 17) then
@@ -187,7 +187,11 @@ function VolcanoBadgeQuest:Cinnabarmansion2()
 end
 
 function VolcanoBadgeQuest:Cinnabarmansion3()
-	return moveToCell(21, 19) -- Fall to Cinnabar mansion B1F
+	if not game.inRectangle(21, 18, 21, 18) then
+		return moveToCell(21, 18)
+	else
+		return moveToCell(21, 19) -- Fall to Cinnabar mansion B1F
+	end
 end
 
 function VolcanoBadgeQuest:CinnabarmansionB1F()
@@ -202,10 +206,14 @@ end
 
 function VolcanoBadgeQuest:CinnabarGym()
 	if not hasItem("Volcano Badge") then
-		if not game.inRectangle(6, 12, 6, 12) then
+		if isNpcOnCell(6, 7) then
+			if not game.inRectangle(6, 8, 6, 8) then
+				return moveToCell(6, 8)
+			else
+				return talkToNpcOnCell(6, 7)
+			end
+		elseif not game.inRectangle(6, 12, 6, 12) then
 			return moveToCell(6, 12)
-		elseif isNpcOnCell(6, 7) then
-			return talkToNpcOnCell(6, 7)
 		else
 			return moveToCell(6, 5)
 		end
