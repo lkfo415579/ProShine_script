@@ -15,7 +15,7 @@ local level			= 70
 local saveRespawnPoint = false
 
 local dialogs = {
-	GymGuy = Dialog:new({"I see you have earned your Marsh Badge"})
+	Nothing = Dialog:new({""})
 }
 local VolcanoBadgeQuest = Quest:new()
 function VolcanoBadgeQuest:new()
@@ -151,6 +151,8 @@ end
 function VolcanoBadgeQuest:CinnabarIsland()
 	if not saveRespawnPoint or self:needPokecenter() then
 		return moveToMap("Pokecenter Cinnabar")
+	elseif self:needPokemart() then
+		return moveToMap("Cinnabar Pokemart")
 	elseif not self:isTrainingOver() then
 		return moveToMap("Route 20")
 	elseif not hasItem("Cinnabar Key") and isNpcOnCell(28, 17) then
@@ -170,6 +172,10 @@ end
 function VolcanoBadgeQuest:PokecenterCinnabar()
 	saveRespawnPoint = true
 	return self:pokecenter("Cinnabar Island")
+end
+
+function VolcanoBadgeQuest:CinnabarPokemart()
+	self:pokemart("Cinnabar Island")
 end
 
 function VolcanoBadgeQuest:Cinnabarmansion1()
