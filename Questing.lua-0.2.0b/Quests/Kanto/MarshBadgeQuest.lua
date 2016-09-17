@@ -38,6 +38,16 @@ function MarshBadgeQuest:isDone()
 	return false
 end
 
+function MarshBadgeQuest:FuchsiaGym()
+	if hasItem("Soul Badge") then
+		return moveToMap("Fuchsia City")
+	else
+		if isNpcOnCell(7, 10) then
+			return talkToNpcOnCell(7, 10)
+		end
+	end
+end
+
 function MarshBadgeQuest:FuchsiaCity()
 	if self:needPokecenter() then
 		return moveToMap("Pokecenter Fuchsia")
@@ -53,6 +63,10 @@ function MarshBadgeQuest:FuchsiaCity()
 	elseif hasItem("HM03 - Surf") then
 		return moveToMap("Route 15 Stop House")
 	end
+end
+
+function MarshBadgeQuest:PokecenterFuchsia()
+	return self:pokecenter("Fuchsia City")
 end
 
 function MarshBadgeQuest:FuchsiaCityStopHouse()
@@ -154,6 +168,10 @@ function MarshBadgeQuest:CeladonCity()
 	end
 end
 
+function MarshBadgeQuest:PokecenterCeladon()
+	return self:pokecenter("Celadon City")
+end
+
 function MarshBadgeQuest:CeladonMart1()
 	if not game.inRectangle(5, 11, 5, 11) then
 		return moveToCell(5, 11)
@@ -249,32 +267,6 @@ function MarshBadgeQuest:SaffronCity()
 	end
 end
 
-function MarshBadgeQuest:SaffronGym()
-	if not hasItem("Marsh Badge") then
-		if game.inRectangle(9, 16, 15, 22) then --entrance
-			return moveToCell(15, 17)
-		elseif game.inRectangle(17, 16, 23, 20) then --right bottom
-			return moveToCell(18, 20)
-		elseif game.inRectangle(1, 16, 7, 20) then --left bottom
-			return moveToCell(6, 20)
-		elseif game.inRectangle(1, 9, 7, 13) then
-			return moveToCell(2, 13)
-		elseif game.inRectangle(1, 2, 7, 6) then
-			return moveToCell(2, 6)
-		elseif game.inRectangle(9, 9, 15, 13) then
-			if isNpcOnCell(12, 10) then
-				return talkToNpcOnCell(12, 10)
-			end
-		end
-	else
-		if game.inRectangle(9, 9, 15, 13) then
-			return moveToCell(10, 13)
-		elseif game.inRectangle(9, 16, 15, 22) then --entrance
-			return moveToMap("Saffron City")
-		end
-	end
-end
-
 function MarshBadgeQuest:PokecenterSaffron()
 	saveRespawnPoint = true
 	return self:pokecenter("Saffron City")
@@ -327,6 +319,32 @@ function MarshBadgeQuest:SilphCo11F()
 	end
 end
 
+function MarshBadgeQuest:SaffronGym()
+	if not hasItem("Marsh Badge") then
+		if game.inRectangle(9, 16, 15, 22) then --entrance
+			return moveToCell(15, 17)
+		elseif game.inRectangle(17, 16, 23, 20) then --right bottom
+			return moveToCell(18, 20)
+		elseif game.inRectangle(1, 16, 7, 20) then --left bottom
+			return moveToCell(6, 20)
+		elseif game.inRectangle(1, 9, 7, 13) then
+			return moveToCell(2, 13)
+		elseif game.inRectangle(1, 2, 7, 6) then
+			return moveToCell(2, 6)
+		elseif game.inRectangle(9, 9, 15, 13) then
+			if isNpcOnCell(12, 10) then
+				return talkToNpcOnCell(12, 10)
+			end
+		end
+	else
+		if game.inRectangle(9, 9, 15, 13) then
+			return moveToCell(10, 13)
+		elseif game.inRectangle(9, 16, 15, 22) then --entrance
+			return moveToMap("Saffron City")
+		end
+	end
+end
+
 -- From Fuchsia to Celadon
 function MarshBadgeQuest:UndergroundHouse3()
 	return moveToMap("Route 7")
@@ -366,24 +384,6 @@ end
 
 function MarshBadgeQuest:Route15StopHouse()
 	return moveToMap("Route 15")
-end
-
-function MarshBadgeQuest:FuchsiaGym()
-	if hasItem("Soul Badge") then
-		return moveToMap("Fuchsia City")
-	else
-		if isNpcOnCell(7, 10) then
-			return talkToNpcOnCell(7, 10)
-		end
-	end
-end
-
-function MarshBadgeQuest:PokecenterFuchsia()
-	return self:pokecenter("Fuchsia City")
-end
-
-function MarshBadgeQuest:PokecenterCeladon()
-	return self:pokecenter("Celadon City")
 end
 
 return MarshBadgeQuest
