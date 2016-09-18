@@ -151,7 +151,7 @@ end
 function VolcanoBadgeQuest:CinnabarIsland()
 	if not saveRespawnPoint or self:needPokecenter() then
 		return moveToMap("Pokecenter Cinnabar")
-	elseif self:needPokemart() then
+	elseif getItemQuantity("Great Ball") < 50 and getMoney() >= 600 then
 		return moveToMap("Cinnabar Pokemart")
 	elseif not self:isTrainingOver() then
 		return moveToMap("Route 20")
@@ -175,7 +175,22 @@ function VolcanoBadgeQuest:PokecenterCinnabar()
 end
 
 function VolcanoBadgeQuest:CinnabarPokemart()
-	self:pokemart("Cinnabar Island")
+	local pokeballCount = getItemQuantity("Great Ball")
+	local money         = getMoney()
+	if money >= 600 and pokeballCount < 50 then
+		if not isShopOpen() then
+			return talkToNpcOnCell(3,5)
+		else
+			local pokeballToBuy = 50 - pokeballCount
+			local maximumBuyablePokeballs = money / 600
+			if maximumBuyablePokeballs < pokeballToBuy then
+				pokeballToBuy = maximumBuyablePokeballs
+			end
+			return buyItem("Great Ball", pokeballToBuy)
+		end
+	else
+		return moveToMap("Cinnabar Island")
+	end
 end
 
 function VolcanoBadgeQuest:Cinnabarmansion1()
